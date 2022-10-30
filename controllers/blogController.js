@@ -1,7 +1,7 @@
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 const Blog = require("../models/blogModel");
-const APIFeatures = require("../utils/apiFeatures");
+const APIFeatures = require("../utils/APIFeatures");
 
 exports.getAllBlogs = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(Blog.find({ state: "published" }), req.query)
