@@ -48,33 +48,19 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
-  // Get token and check if its there
-  let token;
   if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
+    !req.headers ||
+    !req.headers.authorization ||
+    !req.headers.authorization.startsWith("Bearer")
   ) {
-    token = req.headers.authorization.split(" ")[1];
+    return next(new AppError("please provide token", 401));
   }
-  // console.log(token);
-  if (!token) {
-    return next(
-      new AppError("You are not logged in! Please log in to get access", 401)
-    );
-  }
-  // Verification of token
-  const decodedData = await promisify(jwt.verify)(
-    token,
-    process.env.JWT_SECRET
-  );
-  // Check if user exists
-  const user = await User.findById(decodedData.id);
-  if (!user) return next(new AppError("User no longer exists", 401));
-  // Check if user changed password after token was issued
-  if (!user.changedPasswordAfter(decodedData.iat)) {
-    return next(
-      new AppError("Recently changed password! Please login again", 401)
-    );
+  const token = req.headers.authorization.split(" ")[1];
+  const decoded = await promisify(JWT.verify)(token, process.env.JWT_SECRET);
+  if (!decoded) return next(new AppError("Token is invalid", 401));
+  const user = await User.findById(decoded.id);
+  if (!user) {
+    return next(new AppError("user does not exist", 401));
   }
   req.user = user;
   next();
