@@ -5,7 +5,7 @@ const handleCastErrorDB = (err, res) => {
   return new AppError(message, 404);
 };
 const handleDuplicateFieldsError = (err) => {
-  const message = `${err.keyValue.title} already exists in database, please use another value`;
+  const message = `${err.keyValue.name} already exists in database, please use another value`;
   return new AppError(message, 400);
 };
 const handleValidationError = (err) => {
@@ -58,6 +58,7 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === "production") {
     let error = { ...err };
+    error.message = err.message;
     if (err.name === "CastError") error = handleCastErrorDB(err);
     if (err.code === 11000) error = handleDuplicateFieldsError(err);
     if (err.name === "ValidationError") {

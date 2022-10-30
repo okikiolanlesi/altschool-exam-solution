@@ -53,7 +53,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     !req.headers.authorization ||
     !req.headers.authorization.startsWith("Bearer")
   ) {
-    return next(new AppError("please provide token", 401));
+    return next(new AppError("Please provide token", 401));
   }
   const token = req.headers.authorization.split(" ")[1];
   const decoded = await promisify(JWT.verify)(token, process.env.JWT_SECRET);
