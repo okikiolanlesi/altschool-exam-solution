@@ -1,0 +1,29 @@
+{
+  "name": "alt-exam",
+  "version": "1.0.0",
+  "description": "Solution to Altschool second semester exam",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest --coverage --runInBand --detectOpenHandles",
+    "start": "nodemon server.js",
+    "start:prod": "NODE_ENV=production node server.js"
+  },
+  "author": "Osunronbi Okikiola",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.6.0",
+    "helmet": "^6.0.0",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.7.0",
+    "morgan": "^1.10.0",
+    "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "jest": "^29.2.2",
+    "supertest": "^6.3.1"
+  }
+}
