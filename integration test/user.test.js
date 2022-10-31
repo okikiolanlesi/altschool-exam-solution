@@ -3,6 +3,7 @@ const app = require("../app");
 const mongoose = require("mongoose");
 const User = require("../models/userModel");
 require("dotenv").config({ path: "./config.env" });
+jest.setTimeout(20000);
 
 describe("User routes", () => {
   let user;

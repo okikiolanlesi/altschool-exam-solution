@@ -2,9 +2,10 @@ const User = require("../models/userModel");
 const supertest = require("supertest");
 const app = require("../app");
 const mongoose = require("mongoose");
+const { JsonWebTokenError } = require("jsonwebtoken");
 
 require("dotenv").config({ path: "./config.env" });
-
+jest.setTimeout(20000);
 describe("Auth routes", () => {
   beforeAll(async () => {
     mongoose
