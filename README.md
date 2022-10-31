@@ -37,7 +37,7 @@ ___
 * Install NodeJS, mongodb
 * pull this repo
 * update config.env with config.env.example
-* run npm run start
+* run npm run start for production or npm run start:dev for development
 ___
 ## Base URL
 https://okikiola-exam-solution.herokuapp.com/api/v1/blogs
