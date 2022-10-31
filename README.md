@@ -1,8 +1,6 @@
 # AltSchool Africa Second Semester Solution
 
-## Link to the hosted API 
-[Click here](https://google.com)
-
+A Blog App
 ___
 The project passes all the below listed requirements
 
@@ -31,27 +29,47 @@ You are required to build a blogging api. The general idea here is that the api 
 * When a single blog is requested, the api should return the user information(the author) with the blog. The read_count of the blog too should be updated by 1
 * Come up with any algorithm for calculating the reading_time of the blog.
 * Write tests for all endpoints
-
-## Note:
+##### Note:
 * The owner of the blog should be logged in to perform actions
 * Use the **MVC** pattern
-
-## Database
-* Use MongoDB
+___
+## Setup
+* Install NodeJS, mongodb
+* pull this repo
+* update env with example.env
+* run npm run start:dev
+___
+## Base URL
+https://okikiola-exam-solution.herokuapp.com/api/v1/blogs
+___
 
 ## Data Models
 ### User 
-- email is required and should be unique
-- first_name and last_name is required
-- password
+
+  | field | data_type | constraints|
+  |-------|-----------|------------|
+  |first_name|string|required, max-length: 20|
+  |last_name|string|required, max-length: 20|
+  |email|string|required|
+  |password|string|required, min-length: 8|
+  |passwordConfirm|string|required, min-length: 8|
+
 
 ### Blog/Article
-- title is required and unique
-- description
-- author
-- state
-- read_count
-- reading_time
-- tags
-- body is required
-- timestamp
+
+ | field | data_type | constraints|
+  |-------|-----------|------------|
+  |title|string|required, unique|
+  |description|string|required, max-length: 100|
+  |author|mongoose.Schema.ObjectId|required|
+  |state|string|required, default:draft, enum:['draft', 'published']|
+  |read_count|number|default: 0|
+  |reading_time|number|default: 0|
+  |tags|array:strings||
+  |body|string|required|
+  |timestamps|date||
+
+___
+## APIs
+#### Link to postman documentation
+[click here](https://documenter.getpostman.com/view/22751768/2s8YRiJtRW)
