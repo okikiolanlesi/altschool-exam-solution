@@ -38,7 +38,7 @@ app.use("/api/v1/blogs", blogRouter);
 app.use("/", (req, res, next) => {
   res.status(200).json({
     status: "success",
-    message: "Welcome to the Blog API",
+    message: "Welcome to Okikiola Osunronbi Blog API",
   });
 });
 app.all("*", (req, res, next) => {
