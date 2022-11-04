@@ -39,15 +39,28 @@ exports.createBlog = catchAsync(async (req, res, next) => {
   });
 });
 exports.getBlog = catchAsync(async (req, res, next) => {
-  const blog = await Blog.findOne({
-    _id: req.params.id,
-    state: "published",
-  })
-    .select("-__v -state")
-    .populate("author", "name");
+  const blog = await Blog.findOneAndUpdate(
+    { id: req.params.id, state: "published" },
+    { $inc: { read_count: +1 } },
+    {
+      runValidators: true,
+      new: true,
+    }
+  )
+    .select("-__v")
+    .populate("author");
+
+  // const blog = await Blog.findOne({
+  //   _id: req.params.id,
+  //   state: "published",
+  // })
+  //   .select("-__v -state")
+  //   .populate("author", "name");
+
   if (!blog) return next(new AppError("Blog not found", 404));
-  blog.read_count++;
-  await blog.save();
+
+  // blog.read_count++;
+  // await blog.save();
   res.status(200).json({
     status: "success",
     data: {
@@ -56,14 +69,15 @@ exports.getBlog = catchAsync(async (req, res, next) => {
   });
 });
 exports.updateBlog = catchAsync(async (req, res, next) => {
-  let blog = await Blog.findOne({ id: req.params.id });
+  let blog = await Blog.findOne({ id: req.params.id }).populate("author");
 
   if (!blog) return next(new AppError("Blog not found", 404));
-
-  if (req.user.id !== blog.author.id)
+  console.log(blog.author.id, req.user.id);
+  if (req.user.id !== blog.author.id) {
     return next(
       new AppError("You are not authorized to update this blog", 401)
     );
+  }
 
   if (req.body.title) {
     blog.title = req.body.title;
@@ -100,7 +114,7 @@ exports.deleteBlog = catchAsync(async (req, res, next) => {
       new AppError("You are not authorized to delete this blog", 401)
     );
   const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
-  if (!deletedBlog) return next(new AppError("Blog not deleted", 400));
+  if (!deletedBlog) return next(new AppError("Blog not found", 400));
   res.status(204).json({
     status: "success",
     data: null,

@@ -5,7 +5,7 @@ const app = require("../app");
 const mongoose = require("mongoose");
 require("dotenv").config({ path: "./config.env" });
 
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
 describe("Auth routes", () => {
   // let conn;
