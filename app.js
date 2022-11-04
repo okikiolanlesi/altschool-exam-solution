@@ -35,6 +35,12 @@ app.use(express.json({ limit: "10kb" }));
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/blogs", blogRouter);
 
+app.use("/", (req, res, next) => {
+  res.status(200).json({
+    status: "success",
+    message: "Welcome to the Blog API",
+  });
+});
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
