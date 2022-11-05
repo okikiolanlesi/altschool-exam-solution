@@ -73,3 +73,6 @@ ___
 ## APIs
 #### Link to postman documentation
 [click here](https://documenter.getpostman.com/view/22751768/2s8YRiJtRW)
+
+## Contributor
+* Osunronbi Okikiola
