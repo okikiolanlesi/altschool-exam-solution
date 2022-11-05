@@ -15,7 +15,14 @@ class APIFeatures {
       /\b(gte|gt|lte|lt|in)\b/g,
       (match) => `$${match}`
     );
-    this.query = this.query.find(JSON.parse(queryStr));
+
+    let parsedQuery = JSON.parse(queryStr);
+    if (parsedQuery.tags) {
+      let arrayOfTags = parsedQuery.tags.split(",");
+      parsedQuery.tags = { $in: arrayOfTags };
+      console.log(parsedQuery);
+    }
+    this.query = this.query.find(parsedQuery);
 
     return this;
   }

@@ -72,7 +72,6 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
   let blog = await Blog.findOne({ id: req.params.id }).populate("author");
 
   if (!blog) return next(new AppError("Blog not found", 404));
-  console.log(blog.author.id, req.user.id);
   if (req.user.id !== blog.author.id) {
     return next(
       new AppError("You are not authorized to update this blog", 401)
