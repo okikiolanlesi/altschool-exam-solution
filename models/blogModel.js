@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 const blogSchema = new mongoose.Schema(
   {
     title: {
@@ -15,7 +16,7 @@ const blogSchema = new mongoose.Schema(
       ],
     },
     author: {
-      type: mongoose.Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
       required: [true, "Blog must have an author"],
     },

@@ -5,7 +5,11 @@ const authController = require("../controllers/authController");
 router
   .route("/")
   .get(blogController.getAllBlogs)
-  .post(authController.protect, blogController.createBlog);
+  .post(
+    authController.protect,
+    blogController.setAuthorId,
+    blogController.createBlog
+  );
 router
   .route("/getMyBlogs")
   .get(authController.protect, blogController.getMyBlogs);

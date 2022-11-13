@@ -18,11 +18,15 @@ exports.getAllBlogs = catchAsync(async (req, res, next) => {
     },
   });
 });
+exports.setAuthorId = catchAsync(async (req, res, next) => {
+  req.body.author = req.user.id;
+  next();
+});
 exports.createBlog = catchAsync(async (req, res, next) => {
   const newBlogToCreate = {
     title: req.body.title,
     description: req.body.description,
-    author: req.user._id,
+    author: req.body.author,
     state: req.body.state,
     tags: req.body.tags,
     body: req.body.body,
@@ -40,22 +44,13 @@ exports.createBlog = catchAsync(async (req, res, next) => {
 });
 exports.getBlog = catchAsync(async (req, res, next) => {
   const blog = await Blog.findOneAndUpdate(
-    { id: req.params.id, state: "published" },
+    { $and: [{ _id: req.params.id }, { state: "published" }] },
     { $inc: { read_count: +1 } },
     {
       runValidators: true,
       new: true,
     }
-  )
-    .select("-__v")
-    .populate("author");
-
-  // const blog = await Blog.findOne({
-  //   _id: req.params.id,
-  //   state: "published",
-  // })
-  //   .select("-__v -state")
-  //   .populate("author", "name");
+  );
 
   if (!blog) return next(new AppError("Blog not found", 404));
 
@@ -69,9 +64,10 @@ exports.getBlog = catchAsync(async (req, res, next) => {
   });
 });
 exports.updateBlog = catchAsync(async (req, res, next) => {
-  let blog = await Blog.findOne({ id: req.params.id }).populate("author");
+  let blog = await Blog.findOne({ _id: req.params.id });
 
   if (!blog) return next(new AppError("Blog not found", 404));
+
   if (req.user.id !== blog.author.id) {
     return next(
       new AppError("You are not authorized to update this blog", 401)
@@ -106,7 +102,7 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteBlog = catchAsync(async (req, res, next) => {
-  const blog = await Blog.findOne({ id: req.params.id });
+  const blog = await Blog.findById(req.params.id);
   if (!blog) return next(new AppError("Blog not found", 404));
   if (req.user.id !== blog.author.id)
     return next(
