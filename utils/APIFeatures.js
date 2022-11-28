@@ -17,11 +17,24 @@ class APIFeatures {
     );
 
     let parsedQuery = JSON.parse(queryStr);
+
     if (parsedQuery.tags) {
       let arrayOfTags = parsedQuery.tags.split(",");
       parsedQuery.tags = { $in: arrayOfTags };
       console.log(parsedQuery);
     }
+    // Modified query so that it can use $text operator
+    if (parsedQuery.title) {
+      let formerTitle = parsedQuery.title;
+
+      parsedQuery.$text = {
+        $search: formerTitle,
+        $caseSensitive: false,
+      };
+
+      delete parsedQuery.title;
+    }
+
     this.query = this.query.find(parsedQuery);
 
     return this;
