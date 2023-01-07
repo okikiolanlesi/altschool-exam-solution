@@ -16,8 +16,9 @@ const createSendToken = (user, statusCode, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 60 * 60 * 1000
     ),
     httpOnly: true,
+    sameSite: "none",
+    secure: true,
   };
-  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
   res.cookie("jwt", token, cookieOptions);
   user.password = undefined;
   res.status(statusCode).json({
@@ -48,14 +49,22 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
+  // Get token and check if its there
+  let token;
   if (
-    !req.headers ||
-    !req.headers.authorization ||
-    !req.headers.authorization.startsWith("Bearer")
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
   ) {
-    return next(new AppError("Please provide token", 401));
+    token = req.headers.authorization.split(" ")[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
-  const token = req.headers.authorization.split(" ")[1];
+
+  if (!token) {
+    return next(
+      new AppError("You are not logged in! Please log in to get access", 401)
+    );
+  }
   const decoded = await promisify(JWT.verify)(token, process.env.JWT_SECRET);
   if (!decoded) return next(new AppError("Token is invalid", 401));
   const user = await User.findById(decoded.id);
