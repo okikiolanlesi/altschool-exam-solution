@@ -1,5 +1,5 @@
 const joi = require("joi");
-const AppError = require("../utils/appError");
+const AppError = require("../utils/AppError");
 
 const createUserSchema = joi.object({
   first_name: joi.string().required().max(20),
