@@ -40,7 +40,7 @@ ___
 * run npm run start for production or npm run start:dev for development
 ___
 ## Base URL
-https://okikiola-exam-solution.herokuapp.com/api/v1/blogs
+https://blog-api-by-okikiola.onrender.com
 ___
 
 ## Data Models
