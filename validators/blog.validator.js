@@ -1,5 +1,5 @@
 const joi = require("joi");
-const AppError = require("../utils/appError");
+const AppError = require("../utils/AppError");
 
 const createBlogSchema = joi.object({
   title: joi.string().required(),
