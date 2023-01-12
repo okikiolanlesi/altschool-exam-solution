@@ -47,6 +47,8 @@ app.get("/", (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "Welcome to Okikiola Osunronbi Blog API",
+    linkToDocumentation:
+      "https://documenter.getpostman.com/view/22751768/2s8YRiJtRW",
   });
 });
 app.all("*", (req, res, next) => {
